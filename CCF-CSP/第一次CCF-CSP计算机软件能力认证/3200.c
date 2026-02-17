@@ -1,24 +1,20 @@
-// https : // www.acwing.com/file_system/file/content/whole/index/content/4186130/
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+// https : //
+// www.acwing.com/file_system/file/content/whole/index/content/4186130/
 #include <stdbool.h>
-
-typedef struct point
-{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct point {
     int x;
     int y;
     bool type;
 } point;
-
 // BFS 队列节点：当前节点索引 + 已用新增路由器数
-typedef struct QueueNode
-{
+typedef struct QueueNode {
     int u;
     int cnt;
 } QueueNode;
-
-int bfs(point *a, int n, int m, int k, int r)
+int bfs(point* a, int n, int m, int k, int r)
 {
     // dist[u][cnt]：到达节点 u，使用 cnt 个新增路由器的最少边数
     int dist[n + m + 1][k + 1];
@@ -30,15 +26,13 @@ int bfs(point *a, int n, int m, int k, int r)
     q[tail].cnt = 0;
     tail++;
     dist[0][0] = 0;
-    while (head < tail)
-    {
+    while (head < tail) {
         QueueNode curr = q[head++];
         int u = curr.u;
         int cnt = curr.cnt;
         int current_dist = dist[u][cnt];
         // 遍历所有节点 v，尝试扩展
-        for (int v = 0; v < n + m; v++)
-        {
+        for (int v = 0; v < n + m; v++) {
             if (v == u)
                 continue;
             long long dx = (long long)a[u].x - a[v].x;
@@ -48,15 +42,13 @@ int bfs(point *a, int n, int m, int k, int r)
             if (dist_sq > r_sq)
                 continue;
             int new_cnt = cnt;
-            if (v >= n)
-            {
+            if (v >= n) {
                 new_cnt = cnt + 1;
                 if (new_cnt > k)
                     continue;
             }
             // 如果该状态未访问过，更新距离并入队
-            if (dist[v][new_cnt] == -1)
-            {
+            if (dist[v][new_cnt] == -1) {
                 dist[v][new_cnt] = current_dist + 1;
                 q[tail].u = v;
                 q[tail].cnt = new_cnt;
@@ -66,35 +58,29 @@ int bfs(point *a, int n, int m, int k, int r)
     }
     // 找终点（第 1 个节点）的最少边数
     int min_steps = -1;
-    for (int j = 0; j <= k; j++)
-    {
-        if (dist[1][j] != -1)
-        {
-            if (min_steps == -1 || dist[1][j] < min_steps)
-            {
+    for (int j = 0; j <= k; j++) {
+        if (dist[1][j] != -1) {
+            if (min_steps == -1 || dist[1][j] < min_steps) {
                 min_steps = dist[1][j];
             }
         }
     }
     return min_steps - 1;
 }
-
 int main()
 {
     int n, m, k, r;
     scanf("%d %d %d %d", &n, &m, &k, &r);
-    point *plist = (point *)malloc(sizeof(point) * (n + m));
+    point* plist = (point*)malloc(sizeof(point) * (n + m));
 
     // 读取原有路由器
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         scanf("%d %d", &plist[i].x, &plist[i].y);
         plist[i].type = true;
     }
 
     // 读取可选路由器位置
-    for (int i = 0; i < m; i++)
-    {
+    for (int i = 0; i < m; i++) {
         scanf("%d %d", &plist[i + n].x, &plist[i + n].y);
         plist[i + n].type = false;
     }

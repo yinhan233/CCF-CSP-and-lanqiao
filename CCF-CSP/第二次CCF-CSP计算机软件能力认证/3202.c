@@ -9,21 +9,17 @@ int main()
     int cnt = 0;
     scanf("%d", &n);
     memset(hash, 0, sizeof(hash));
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         int k;
         scanf("%d", &k);
         hash[k] += 1;
     }
     int z = 1;
-    while (z < 10000)
-    {
-        if (hash[z - 1] > 0 && hash[z] > 0)
-        {
+    while (z < 10000) {
+        if (hash[z - 1] > 0 && hash[z] > 0) {
             cnt += (hash[z - 1] > hash[z] ? hash[z] : hash[z - 1]);
         }
-        if (hash[z + 1] > 0 && hash[z] > 0)
-        {
+        if (hash[z + 1] > 0 && hash[z] > 0) {
             cnt += (hash[z + 1] > hash[z] ? hash[z] : hash[z + 1]);
         }
         z += 2;
